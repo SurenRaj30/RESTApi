@@ -9,7 +9,7 @@ class AuthController extends Controller
 {
     public function register(Request $request){
         
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required|max:10',
             'email' => 'required|email',
             'password' => 'required|min:8',
@@ -21,8 +21,6 @@ class AuthController extends Controller
             'password' => bcrypt($request->password)
         ]);
 
-        
-
         $token = $user->createToken('authToken')->accessToken;
 
         return response()->json(['token'=>$token, 'message'=>'New user created succesfully'], 200);
@@ -33,6 +31,11 @@ class AuthController extends Controller
 
         public function login(Request $request){
             
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:8',
+            ]);
+
             $regUser = [
                 'email' => $request->email,
                 'password' => $request->password

@@ -39,10 +39,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('users/{id}/show', [UserController::class, 'show']);
     Route::put('users/{id}/update', [UserController::class, 'update']);
     Route::delete('users/{id}/delete', [UserController::class, 'destroy']);
-
-    //manage data
-
-    Route::get('users/page', [UserController::class, 'manage']);
 });
 
 //Excel::import(new UserImport,request()->file('file'));

@@ -44,7 +44,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required|max:10',
             'email' => 'required|email',
             'password' => 'required|min:8',
@@ -112,6 +112,7 @@ class UserController extends Controller
             'name' => 'required|max:10',
             'email' => 'required|email',
         ]);
+
 
         $user = User::findorFail($id);
 
