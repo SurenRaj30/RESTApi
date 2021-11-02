@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\File;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
 use App\Exports\UsersExport;
@@ -12,9 +13,6 @@ use App\Transformers\UserTransformer;
 
 class UserController extends Controller
 {
-
-
-
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +44,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|max:10',
-            'email' => 'required|email',
+            'email' => 'required|unique:users|email',
             'password' => 'required|min:8',
         ]);
 
@@ -106,11 +104,10 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //validation
-
+        
         $request->validate([
             'name' => 'required|max:10',
-            'email' => 'required|email',
+            'email' => 'required|unique:users|email',
         ]);
 
 
@@ -147,16 +144,26 @@ class UserController extends Controller
         }else{
             return response()->json(['message'=>'User info not found'], 404);
         }
-
-
-
     }
 
-    //import excel file to database
+    //import and export functions
 
     public function fileImport(Request $request)
     {
-        Excel::import(new UsersImport, $request->file('file')->store('temp'));
-        return response()->json(['message'=>"Excel file uploaded succesfully"]);
+        $users = Excel::toCollection(new UsersImport(), $request->file('file')->store('temp'));
+        
+        foreach ($users[0] as $user) {
+            User::where('id', $user[0])->update([
+                'name' => $user[1],
+                'email' => $user[2],
+            ]);
+        }
+        return response()->json(['message'=>"Updated excel file uploaded succesfully"]);
     }
+
+    public function fileExport() 
+    {
+        return Excel::download(new UsersExport, 'users-collection.xlsx');
+        
+    }    
 }

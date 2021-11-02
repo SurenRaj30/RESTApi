@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class UsersTablesSeeder extends Seeder
 {
@@ -18,15 +19,14 @@ class UsersTablesSeeder extends Seeder
     {
         User::truncate();
 
-        $faker = \Faker\Factory::create();
+        $faker = Faker::create();
 
-        for ($i = 0; $i < 20; $i++) {
-            User::create([
-                'name' => $faker->name,
-                'email' => $faker->email,
-                'password' => Hash::make($faker->password),
-
-            ]);
+        foreach (range(1,10) as $index) {
+	        DB::table('users')->insert([
+	            'name' => $faker->name,
+	            'email' => $faker->email,
+	            'password' => bcrypt('password'),
+	        ]);
         }
     }
 }

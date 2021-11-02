@@ -41,5 +41,9 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('users/{id}/delete', [UserController::class, 'destroy']);
 });
 
-//Excel::import(new UserImport,request()->file('file'));
-Route::post('file-import', [UserController::class, 'fileImport'])->name('file-import');
+
+Route::post('file-import', [UserController::class, 'fileImport'])
+->name('file-import');
+
+Route::get('file-export', [UserController::class, 'fileExport'])
+->name('file-export');
