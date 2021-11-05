@@ -43,9 +43,15 @@ return [
             'provider' => 'users',
         ],
 
+        'admins' => [
+            'driver' => 'session',
+            'model' => App\Models\Admin::class,
+            'provider' => 'admins',
+        ],
+
         'api' => [
             'driver' => 'passport',
-            'provider' => 'users',
+            'provider' => 'admins',
         ],
     ],
 
@@ -70,6 +76,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
              Laravel\Passport\PassportServiceProvider::class,
         ],
 
@@ -97,6 +108,13 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

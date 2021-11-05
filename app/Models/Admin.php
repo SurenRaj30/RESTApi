@@ -8,8 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-
-class User extends Authenticatable
+class Admin extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -19,8 +18,8 @@ class User extends Authenticatable
      * @var string[]
      */
 
-    protected $primaryKey = 'id';
-    protected $table = 'users';
+    protected $guard='admins';
+    protected $table = 'admins';
     public $timestamps = false;
 
     protected $fillable = [
@@ -47,4 +46,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getAuthPassword()
+    {
+     return $this->password;
+    }
 }

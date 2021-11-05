@@ -6,8 +6,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,27 +21,27 @@ use App\Http\Controllers\AuthController;
 //     return $request->user();
 // });
 
-//auth
-
+//auth for admin
 Route::post('register', [AuthController::class, 'register'])
 ->name('register');
 Route::post('login', [AuthController::class, 'login'])
 ->name('login');
 
-
-//crud functions after auth
+//crud functions
 Route::middleware('auth:api')->group(function () {
-    //Route::resource('users', UserController::class);
     Route::get('users', [UserController::class, 'index']);
     Route::post('users/store', [UserController::class, 'store']);
     Route::get('users/{id}/show', [UserController::class, 'show']);
     Route::put('users/{id}/update', [UserController::class, 'update']);
     Route::delete('users/{id}/delete', [UserController::class, 'destroy']);
+
+//excel functions
+    Route::post('file-import', [UserController::class, 'fileImport'])
+    ->name('file-import');
+    Route::get('file-export', [UserController::class, 'fileExport'])
+    ->name('file-export');
 });
 
 
-Route::post('file-import', [UserController::class, 'fileImport'])
-->name('file-import');
 
-Route::get('file-export', [UserController::class, 'fileExport'])
-->name('file-export');
+

@@ -21,7 +21,7 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = User::paginate();
+        $users = User::paginate(10);
         return fractal($users, new UserTransformer())->respond();
     }
     /**
@@ -150,12 +150,18 @@ class UserController extends Controller
 
     public function fileImport(Request $request)
     {
+        $users = Excel::import(new UsersImport(), $request->file('file')->store('temp'));
+        return response()->json(['message'=>"Excel file uploaded succesfully"]);
+    }
+
+    public function fileUpdatedImport(Request $request)
+    {
         $users = Excel::toCollection(new UsersImport(), $request->file('file')->store('temp'));
         
         foreach ($users[0] as $user) {
-            User::where('id', $user[0])->update([
-                'name' => $user[1],
-                'email' => $user[2],
+            User::where('id', $user['id'])->update([
+                'name' => $user['name'],
+                'email' => $user['email'],
             ]);
         }
         return response()->json(['message'=>"Updated excel file uploaded succesfully"]);
