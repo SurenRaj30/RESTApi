@@ -61,8 +61,7 @@ class AuthController extends Controller
 
     }
 
-      
-
+    
         protected function guard()
         {
             return Auth::guard('admins');

@@ -154,18 +154,18 @@ class UserController extends Controller
         return response()->json(['message'=>"Excel file uploaded succesfully"]);
     }
 
-    public function fileUpdatedImport(Request $request)
-    {
-        $users = Excel::toCollection(new UsersImport(), $request->file('file')->store('temp'));
+    // public function fileUpdatedImport(Request $request)
+    // {
+    //     $users = Excel::toCollection(new UsersImport(), $request->file('file')->store('temp'));
         
-        foreach ($users[0] as $user) {
-            User::where('id', $user['id'])->update([
-                'name' => $user['name'],
-                'email' => $user['email'],
-            ]);
-        }
-        return response()->json(['message'=>"Updated excel file uploaded succesfully"]);
-    }
+    //     foreach ($users[0] as $user) {
+    //         User::where('id', $user['id'])->update([
+    //             'name' => $user['name'],
+    //             'email' => $user['email'],
+    //         ]);
+    //     }
+    //     return response()->json(['message'=>"Updated excel file uploaded succesfully"]);
+    // }
 
     public function fileExport() 
     {
